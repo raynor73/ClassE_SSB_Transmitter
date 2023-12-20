@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "eth.h"
+#include "i2c.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -35,7 +36,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define SI5351_CORRECTION 0
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -91,8 +92,12 @@ int main(void)
   MX_ETH_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_HS_USB_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
+  si5351_Init(SI5351_CORRECTION);
 
+  si5351_SetupCLK0(14000000, SI5351_DRIVE_STRENGTH_8MA);
+  si5351_EnableOutputs(1 << 0);
   /* USER CODE END 2 */
 
   /* Infinite loop */

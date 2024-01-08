@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "si5351.h"
+#include "dwt_stm32_delay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,6 +37,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define DATA_SIZE 512
+#define FULL_BUFFER_SIZE 1024
+#define SAMPLE_RATE 7000
+#define MAX_VALUE_FROM_ADC 0x0FFF
+
 #define SI5351_CORRECTION 0
 /* USER CODE END PD */
 
@@ -105,7 +111,20 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	for (int i = 0; i < DATA_SIZE; i++) {
+		if (i == 142) {
+			si5351_SetupCLK0(14001000, SI5351_DRIVE_STRENGTH_8MA);
+			si5351_EnableOutputs(1 << 0);
+			//HAL_Delay(1);
+			DWT_Delay_us(142);
+		} else if (i == 214) {
+			si5351_SetupCLK0(14001500, SI5351_DRIVE_STRENGTH_8MA);
+			si5351_EnableOutputs(1 << 0);
+			DWT_Delay_us(142);
+		} else {
+            si5351_EnableOutputs(0);
+		}
+	}
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
